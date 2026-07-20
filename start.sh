@@ -1,26 +1,43 @@
 #!/bin/sh
 
-# Создаём конфиг
+# Записываем конфиг в stdout для отладки
 cat > /tmp/config.json << EOF
 {
-  "log": {"loglevel": "warning"},
-  "inbounds": [{
-    "port": ${PORT:-8080},
-    "protocol": "vless",
-    "settings": {
-      "clients": [{"id": "${UUID}","level": 0}],
-      "decryption": "none"
-    },
-    "streamSettings": {
-      "network": "ws",
-      "wsSettings": {"path": "${WSPATH:-/ws}"}
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "port": ${PORT:-8080},
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "${UUID}",
+            "level": 0
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "${WSPATH:-/ws}"
+        }
+      }
     }
-  }],
-  "outbounds": [{"protocol": "freedom"}]
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom"
+    }
+  ]
 }
 EOF
 
-echo "Starting Xray on port ${PORT:-8080}, path ${WSPATH:-/ws}"
+# Проверяем что Xray существует
+which xray
+ls -la /usr/local/bin/xray 2>/dev/null || echo "xray not in /usr/local/bin"
 
-# Запускаем Xray (команда точно есть в этом образе)
-exec xray run -c /tmp/config.json
+# Запускаем напрямую (без exec чтобы увидеть ошибки)
+xray run -c /tmp/config.json
