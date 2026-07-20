@@ -1,10 +1,7 @@
 #!/bin/sh
 
-# Создаём конфиг прямо в домашней директории
-CONFIG_FILE="/tmp/config.json"
-
-# Создаём конфиг
-cat > $CONFIG_FILE << EOF
+# Создаём конфиг в /tmp (точно доступно для записи)
+cat > /tmp/config.json << EOF
 {
   "log": {
     "loglevel": "warning"
@@ -38,9 +35,7 @@ cat > $CONFIG_FILE << EOF
 }
 EOF
 
-echo "=== Starting Xray ==="
-echo "Port: ${PORT:-8080}"
-echo "Path: ${WSPATH:-/ws}"
+echo "Config created successfully"
 
-# Запускаем Xray напрямую
-exec /usr/local/bin/xray run -c $CONFIG_FILE
+# Запускаем Xray
+exec xray run -c /tmp/config.json
