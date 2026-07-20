@@ -1,13 +1,12 @@
 FROM alpine:latest
 
-# Устанавливаем Xray вручную
+# Устанавливаем Xray
 RUN apk add --no-cache curl unzip && \
-    mkdir -p /usr/local/bin && \
     curl -L -o /tmp/xray.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip && \
-    unzip /tmp/xray.zip -d /tmp/xray && \
-    cp /tmp/xray/xray /usr/local/bin/xray && \
-    chmod +x /usr/local/bin/xray && \
-    rm -rf /tmp/xray /tmp/xray.zip && \
+    unzip /tmp/xray.zip -d /tmp/xray-temp && \
+    cp /tmp/xray-temp/xray /usr/bin/xray && \
+    chmod +x /usr/bin/xray && \
+    rm -rf /tmp/xray.zip /tmp/xray-temp && \
     apk del curl unzip
 
 COPY start.sh /start.sh
