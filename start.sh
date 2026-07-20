@@ -1,11 +1,5 @@
 #!/bin/sh
 
-# Проверяем, что xray доступен
-if [ ! -f /usr/bin/xray ]; then
-    echo "ERROR: xray not found in /usr/bin/xray"
-    exit 1
-fi
-
 # Создаём конфиг
 cat > /tmp/config.json << EOF
 {
@@ -26,5 +20,7 @@ cat > /tmp/config.json << EOF
 }
 EOF
 
-echo "Config created. Starting Xray on port ${PORT:-8080}..."
-exec /usr/bin/xray run -c /tmp/config.json
+echo "Starting Xray on port ${PORT:-8080}, path ${WSPATH:-/ws}"
+
+# Запускаем Xray (команда точно есть в этом образе)
+exec xray run -c /tmp/config.json
