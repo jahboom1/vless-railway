@@ -1,21 +1,36 @@
 #!/bin/sh
-# Создаём конфиг на лету
+
+# Создаём конфиг
 cat > /usr/local/etc/xray/config.json << EOF
 {
-  "log": {"loglevel": "warning"},
-  "inbounds": [{
-    "port": $PORT,
-    "protocol": "vless",
-    "settings": {
-      "clients": [{"id": "$UUID"}],
-      "decryption": "none"
-    },
-    "streamSettings": {
-      "network": "ws",
-      "wsSettings": {"path": "$WSPATH"}
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "port": $PORT,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "$UUID"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "$WSPATH"
+        }
+      }
     }
-  }],
-  "outbounds": [{"protocol": "freedom"}]
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom"
+    }
+  ]
 }
 EOF
 
