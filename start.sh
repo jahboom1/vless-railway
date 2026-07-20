@@ -4,10 +4,10 @@ cat > /usr/local/etc/xray/config.json << EOF
 {
   "log": {"loglevel": "warning"},
   "inbounds": [{
-    "port": $443,
+    "port": $PORT,
     "protocol": "vless",
     "settings": {
-      "clients": [{"id": "$adebb876-9c07-4a92-a42b-9e1029ef0f7f"}],
+      "clients": [{"id": "$UUID"}],
       "decryption": "none"
     },
     "streamSettings": {
