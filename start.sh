@@ -1,34 +1,18 @@
 #!/bin/sh
 
-# Скачиваем Xray при запуске
-echo "Downloading Xray..."
-curl -L -o xray.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
-unzip -o xray.zip -d xray-temp
-mv xray-temp/xray xray
-chmod +x xray
-rm -rf xray.zip xray-temp
+echo "=== DEBUG: Searching for xray ==="
 
-echo "Xray downloaded successfully"
+# Ищем xray во всех возможных местах
+find / -name xray 2>/dev/null
+echo "---"
+ls -la /usr/bin/xray 2>/dev/null || echo "not in /usr/bin"
+ls -la /usr/local/bin/xray 2>/dev/null || echo "not in /usr/local/bin"
+ls -la /bin/xray 2>/dev/null || echo "not in /bin"
+ls -la /xray 2>/dev/null || echo "not in /"
+which xray 2>/dev/null || echo "which: not found"
+echo "---"
+echo "PATH: $PATH"
+echo "---"
+ls -la / 2>/dev/null | head -20
 
-# Создаём конфиг
-cat > config.json << EOF
-{
-  "log": {"loglevel": "warning"},
-  "inbounds": [{
-    "port": ${PORT:-8080},
-    "protocol": "vless",
-    "settings": {
-      "clients": [{"id": "${UUID}","level": 0}],
-      "decryption": "none"
-    },
-    "streamSettings": {
-      "network": "ws",
-      "wsSettings": {"path": "${WSPATH:-/ws}"}
-    }
-  }],
-  "outbounds": [{"protocol": "freedom"}]
-}
-EOF
-
-echo "Starting Xray on port ${PORT:-8080}..."
-./xray run -c config.json
+echo "=== DEBUG END ==="
